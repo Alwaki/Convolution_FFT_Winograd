@@ -1,5 +1,3 @@
-export Winograd
-
 function zeropad(data, filter)
     N = length(filter) - 1
     z = zeros(1, N)

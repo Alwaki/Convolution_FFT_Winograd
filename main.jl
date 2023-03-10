@@ -1,7 +1,7 @@
-import Pkg; Winograd;
-Pkg.add("FFTW"); Pkg.add("DSP"); Pkg.add("BenchmarkTools"); Pkg.add("Plots")
-Pkg.add("LaTeXStrings")
+import Pkg; 
+Pkg.add(["FFTW", "DSP", "BenchmarkTools", "Plots", "LaTeXStrings"]);
 using FFTW, DSP, BenchmarkTools, Plots, LaTeXStrings
+include("Winograd.jl")
 
 ################################################
 ##
