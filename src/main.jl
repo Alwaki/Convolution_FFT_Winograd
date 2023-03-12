@@ -20,21 +20,32 @@ b2 = 0.5*(b1 + g[2])
 b3 = 0.5*(b1 - g[2])
 times_fft = []
 times_wino = []
-batches = 10:100
+batches = 20
+#=
 for d in tqdm(batches)
     global data1d = rand(Float64, (1, d))
     global data1d_padded = zeropad(data1d,filter1d);
     global N = Int64(length(data1d_padded) - length(filter1d) + 1);
     global output_list = zeros(1,N);
-    t1 = @belapsed conv(data1d, filter1d);
-    t2 = @belapsed Winograd(data1d_padded, filter1d, N, output_list, b2, b3);
-    global times_fft = [times_fft; t1]
-    global times_wino = [times_wino; t2]
+    global i = 1;
+    t1 = @belapsed conv($data1d, $filter1d);
+    t2 = @belapsed Winograd($data1d_padded, $filter1d, $N, $output_list, $b2, $b3, $i);
+    @benchmark Winograd($data1d_padded, $filter1d, $N, $output_list, $b2, $b3, $i)
+    #global times_fft = [times_fft; t1]
+    #global times_wino = [times_wino; t2]
 end
+=#
+d = 100
+data1d = rand(Float64, (1, d))
+data1d_padded = zeropad(data1d,filter1d);
+N = Int64(length(data1d_padded) - length(filter1d) + 1);
+output_list = zeros(1,N);
+i = 1;
+@benchmark Winograd($data1d_padded, $filter1d, $N, $output_list, $b2, $b3, $i)
 
-p = plot(batches, [times_fft, times_wino], title="log-log complexity plot", label=["FFT" "Winograd"], linewidth=2, xscale=:log10, yscale=:log10, minorgrid=true)
-xlabel!(L"$log_{10}(N)$")
-ylabel!(L"$log_{10}(t)$")
+#p = plot(batches, [times_fft, times_wino], title="log-log complexity plot", label=["FFT" "Winograd"], linewidth=2, xscale=:log10, yscale=:log10, minorgrid=true)
+#xlabel!(L"$log_{10}(N)$")
+#ylabel!(L"$log_{10}(t)$")
 
 
 ################################################

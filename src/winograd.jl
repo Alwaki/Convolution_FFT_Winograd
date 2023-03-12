@@ -11,8 +11,7 @@ function F23(d, g, b2, b3)
 end
 
 @inline
-function Winograd(data, filter, N, output_list, b2, b3)
-    i = 1
+function Winograd(data, filter, N, output_list, b2, b3, i)
     while i < N 
         output_list[i:i+1] = F23(data[i:i+3], filter, b2, b3)
         i+=1
