@@ -4,11 +4,13 @@ function zeropad(data, filter)
     return [z data z] 
 end
 
+@inline
 function F23(d, g, b2, b3)
     return [((d[1] - d[3]) * g[1])+((d[2] + d[3]) * b2)+((d[3] - d[2]) * b3)
      ((d[2] + d[3]) * b2)-((d[3] - d[2]) * b3)-((d[2] - d[4]) * g[3])]
 end
 
+@inline
 function Winograd(data, filter, N, output_list, b2, b3)
     i = 1
     while i < N 
