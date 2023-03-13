@@ -7,7 +7,7 @@ Description:    This project intends to benchmark convolution
                 differences in benefits for different data 
                 and filter sizes.
 
-Authors:        Alexander Wallén Kiessling & Viktor Svalstedt
+Authors:        Alexander Wallén Kiessling
 
 Version:        0.1 (March 2023)
 """
