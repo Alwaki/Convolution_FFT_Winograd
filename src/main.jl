@@ -15,10 +15,11 @@ Version:        0.1 (March 2023)
 import Pkg; 
 Pkg.add(["FFTW", "DSP", "BenchmarkTools", "Plots", "LaTeXStrings", "ProgressBars"]);
 using FFTW, DSP, BenchmarkTools, Plots, LaTeXStrings, ProgressBars
-include("Winograd.jl", "tests.jl")
+include("winograd.jl")
+include("tests.jl")
 
 # Specify threads (lasts through executions)
 FFTW.set_num_threads(1)
 
 # Run 1D test
-test1d([1.0, 2.0, 1.0], [10:10:100]);
+test1D([1.0, 2.0, 1.0], 10:10:100);
