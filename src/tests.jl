@@ -21,18 +21,18 @@ function test1D(g, d)
     times_wino = []
 
     for batch in tqdm(d)
-        global data1d = rand(Float64, (1, batch))
-        global data1d_padded = zeropad1D(data1d,g);
-        global N = Int64(length(data1d_padded) - length(g) + 1);
-        global output_list = zeros(1,N);
-        global i = 1;
+        data1d = rand(Float64, (1, batch))
+        data1d_padded = zeropad1D(data1d,g);
+        N = Int64(length(data1d_padded) - length(g) + 1);
+        output_list = zeros(1,N);
+        i = 1;
         t1 = @belapsed conv($data1d, $g);
         t2 = @belapsed Winograd1D($data1d_padded, $g, $N, $output_list, $b2, $b3, $i);
-        global times_fft = [times_fft; t1]
-        global times_wino = [times_wino; t2]
+        times_fft = [times_fft; t1]
+        times_wino = [times_wino; t2]
     end
 
-    p = plot(batches, [times_fft, times_wino], title="log-log complexity plot", label=["FFT" "Winograd"], linewidth=2, xscale=:log10, yscale=:log10, minorgrid=true)
+    p = plot(d, [times_fft, times_wino], title="log-log complexity plot", label=["FFT" "Winograd"], linewidth=2, xscale=:log10, yscale=:log10, minorgrid=true)
     xlabel!(L"$log_{10}(N)$")
     ylabel!(L"$log_{10}(t)$")
 
