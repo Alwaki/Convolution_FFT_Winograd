@@ -14,7 +14,7 @@ The project depends on the following Julia packages: FFTW, DSP, BenchmarkTools, 
 
 ### Executing program
 
-* The program can be run by executing the main file from the src directory:
+The program can be run by executing the main file from the src directory:
 
 ```
 julia main.jl
