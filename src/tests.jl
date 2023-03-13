@@ -22,8 +22,8 @@ function test1D(g, d)
 
     for batch in tqdm(d)
         global data1d = rand(Float64, (1, batch))
-        global data1d_padded = zeropad1D(data1d,filter1d);
-        global N = Int64(length(data1d_padded) - length(filter1d) + 1);
+        global data1d_padded = zeropad1D(data1d,g);
+        global N = Int64(length(data1d_padded) - length(g) + 1);
         global output_list = zeros(1,N);
         global i = 1;
         t1 = @belapsed conv($data1d, $g);
