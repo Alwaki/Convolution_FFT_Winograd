@@ -57,3 +57,23 @@ function Winograd1D(data, filter, N, output_list, b2, b3, i)
     end
     return output_list
 end
+
+"""
+
+    Note: Work in progress!
+
+    WinogradMatrix2D()
+
+"""
+function WinogradMatrix2D()
+    filter2d = [1.0 1.0 1.0; 1.0 2.0 1.0; 1.0 1.0 1.0]
+    data2d = [0.0 1.0 1.0 1.0; 2.0 3.0 4.0 5.0; 1.0 2.0 3.0 4.0; 0.0 2.0 1.0 3.0]
+    At = [1 1 1 0; 0 1 -1 -1]
+    G = [1 0 0; 0.5 0.5 0.5; 0.5 -0.5 0.5; 0 0 1]
+    Bt = [1 0 -1 0; 0 1 1 0; 0 -1 1 0; 0 1 0 -1]
+
+    y = At*((G*filter2d*transpose(G)).*(Bt*data2d*transpose(Bt)))*transpose(At)
+    y2 = conv(data2d, filter2d)
+    print(y)
+    print(y2)
+end
