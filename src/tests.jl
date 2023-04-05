@@ -5,7 +5,7 @@
    - `f::Array{Float}`: 1D filter, of size 1x3.
    - `d::Array{Integer}`: Lengths of arrays to convolve, of size 1xN.
 
-Benchmark FFT and winograd convolution in 1D with filter f for data lengths as specified
+Benchmark Naive, FFT and winograd convolution in 1D with filter f for data lengths as specified
 by an array d. Plots log-log plot of time taken for each.
 
 # Examples
@@ -19,6 +19,7 @@ function test1D(g, d)
     b3 = 0.5*(b1 - g[2])
     times_fft = []
     times_wino = []
+    times_naive = []
 
     for batch in tqdm(d)
         data1d = rand(Float64, (1, batch))
@@ -27,14 +28,18 @@ function test1D(g, d)
         output_list = zeros(1,N);
         i = 1;
         t1 = @belapsed conv($data1d, $g);
-        t2 = @belapsed Winograd1D($data1d_padded, $g, $N, $output_list, $b2, $b3, $i);
+        t2 = @belapsed Winograd1D!($data1d_padded, $g, $N, $output_list, $b2, $b3, $i);
+        t3 = @belapsed naive1D!($data1d_padded, $g, $N, $output_list)
         times_fft = [times_fft; t1]
         times_wino = [times_wino; t2]
+        times_naive = [times_naive; t3]
     end
 
-    p = plot(d, [times_fft, times_wino], title="log-log complexity plot", label=["FFT" "Winograd"], linewidth=2, xscale=:log10, yscale=:log10, minorgrid=true)
+    p = plot(d, [times_fft, times_wino, times_naive], title="log-log complexity plot", label=["FFT" "Winograd" "Naive"], linewidth=2, xscale=:log10, yscale=:log10, minorgrid=true)
     xlabel!(L"$log_{10}(N)$")
     ylabel!(L"$log_{10}(t)$")
+    display(p)
+
 
 end
 

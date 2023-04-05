@@ -1,25 +1,4 @@
 """
-    zeropad1D(data, filter)
-    
-    # Arguments
-   - `data::Array{Float}`: Data array 
-   - `filter::Array{Float}`: 1D filter 
-
-Adds zeros to a data array, with consideration to the shape of the filter to be used.
-
-# Examples
-```julia-repl
-julia> zeropad1D([1.0, 2.0, 3.0], [1.0, 1.0, 1.0])
-[0.0, 0.0, 1.0, 2.0, 3.0, 0.0, 0.0]
-```
-"""
-function zeropad1D(data, filter)
-    N = length(filter) - 1
-    z = zeros(1, N)
-    return [z data z] 
-end
-
-"""
     F23(d, g, b2, b3)
 
     # Arguments
@@ -47,13 +26,16 @@ end
     - `b3::Float`: Multiplication constant
     - `i::Integer`: Iteration variable
 
-Calls F23 repeatedly to perform winograd convolution in steps over data array. Note that 
+    Computes the Winograd convolution with output size 2 and filter size 3. Note that 
 this function works only on 1D data and filters.
 """
-function Winograd1D(data, filter, N, output_list, b2, b3, i)
-    while i < N 
-        output_list[i:i+1] = F23(data[i:i+3], filter, b2, b3)
-        i+=1
+function Winograd1D!(d, g, N, s, b2, b3, i)
+    @inline for i = 1:N-1
+        s[i:i+1] = [((d[1] - d[3]) * g[1])+
+        ((d[2] + d[3]) * b2)+((d[3] - d[2]) * b3)
+        ((d[2] + d[3]) * b2)-
+        ((d[3] - d[2]) * b3)-
+        ((d[2] - d[4]) * g[3])]
     end
-    return output_list
+    return s
 end
