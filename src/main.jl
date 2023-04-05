@@ -25,4 +25,4 @@ include("util.jl")
 FFTW.set_num_threads(1)
 
 # Run 1D test
-test1D([1.0, 2.0, 1.0], 10:10:100);
+test1D([1.0, 2.0, 1.0], 1000:1000:10000);

@@ -17,6 +17,7 @@ function test1D(g, d)
     b1 = g[1] + g[3]
     b2 = 0.5*(b1 + g[2])
     b3 = 0.5*(b1 - g[2])
+    b = [b2 b3]
     times_fft = []
     times_wino = []
     times_naive = []
@@ -26,9 +27,8 @@ function test1D(g, d)
         data1d_padded = zeropad1D(data1d,g);
         N = Int64(length(data1d_padded) - length(g) + 1);
         output_list = zeros(1,N);
-        i = 1;
         t1 = @belapsed conv($data1d, $g);
-        t2 = @belapsed Winograd1D!($data1d_padded, $g, $N, $output_list, $b2, $b3, $i);
+        t2 = @belapsed Winograd1D!($data1d_padded, $g, $N, $output_list, $b);
         t3 = @belapsed naive1D!($data1d_padded, $g, $N, $output_list)
         times_fft = [times_fft; t1]
         times_wino = [times_wino; t2]
