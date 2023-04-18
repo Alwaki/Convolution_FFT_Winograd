@@ -14,8 +14,8 @@ Version:        1.0 (April 2023)
 """
 
 import Pkg; 
-Pkg.add(["FFTW", "DSP", "BenchmarkTools", "Plots", "LaTeXStrings", "ProgressBars"]);
-using FFTW, DSP, BenchmarkTools, Plots, LaTeXStrings, ProgressBars
+Pkg.add(["FFTW", "DSP", "BenchmarkTools", "Plots", "LaTeXStrings", "ProgressBars", "ProfileView"]);
+using FFTW, DSP, BenchmarkTools, Plots, LaTeXStrings, ProgressBars, Profile
 include("winograd.jl")
 include("tests.jl")
 include("naive.jl")
@@ -25,4 +25,5 @@ include("util.jl")
 FFTW.set_num_threads(1)
 
 # Run 1D test
-test1D([1.0, 2.0, 1.0], 1000:1000:10000);
+r = exp10.(range(0, stop=5, length=100))
+test1D([1.0, 2.0, 1.0], r);
