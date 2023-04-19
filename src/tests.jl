@@ -26,7 +26,7 @@ function test1D(g, d)
 
     
     for batch in tqdm(d)
-        data1d = rand(Float64, (1, Int64(batch)))
+        data1d = rand(Float64, (1, Int64(floor(batch))))
         data1d_padded = zeropad1D(data1d,g);
         N = Int64(length(data1d_padded) - length(g) + 1);
         output_list = zeros(1,N);
