@@ -25,5 +25,5 @@ include("util.jl")
 FFTW.set_num_threads(1)
 
 # Run 1D test
-r = exp10.(range(0, stop=5, length=100))
+r = exp10.(range(0, stop=5, length=40))
 test1D([1.0, 2.0, 1.0], r);
