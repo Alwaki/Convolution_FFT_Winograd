@@ -22,14 +22,11 @@ function test1D(g, d)
     times_wino = []
     times_naive = []
 
-    
-
-    
     for batch in tqdm(d)
         data1d = rand(Float64, (1, Int64(floor(batch))))
         data1d_padded = zeropad1D(data1d,g);
         N = Int64(length(data1d_padded) - length(g) + 1);
-        output_list = zeros(1,N);
+        output_list = zeros(N);
         t1 = @belapsed conv($data1d_padded, $g);
         t2 = @belapsed Winograd1D!($data1d_padded, $g, $N, $output_list, $b);
         t3 = @belapsed naive1D!($data1d_padded, $g, $N, $output_list)
@@ -37,12 +34,12 @@ function test1D(g, d)
         times_wino = [times_wino; t2]
         times_naive = [times_naive; t3]
     end
-    
 
-    p = plot(d, [times_fft, times_wino, times_naive], title="log-log complexity plot", label=["FFT" "Winograd" "Naive"], linewidth=2, xscale=:log10, yscale=:log10, minorgrid=true)
+    p = plot(d, [times_fft, times_wino, times_naive], title="log-log complexity plot", label=["FFT" "Winograd" "Naive"], linewidth=2, xscale=:log10, yscale=:log10, minorgrid=true, legend=:topleft)
     xlabel!(L"$log_{10}(N)$")
     ylabel!(L"$log_{10}(t)$")
     display(p)
+    savefig(p,"file.png")
     
 
 
