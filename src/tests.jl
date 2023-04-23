@@ -2,7 +2,7 @@
     test1D(f, d)
 
     # Arguments
-   - `f::Array{Float}`: 1D filter, of size 1x3.
+   - `f::Array{}`: 1D filter, of size 1x3.
    - `d::Array{Integer}`: Lengths of arrays to convolve, of size 1xN.
 
 Benchmark Naive, FFT and winograd convolution in 1D with filter f for data lengths as specified
@@ -13,23 +13,23 @@ by an array d. Plots log-log plot of time taken for each.
 julia> test1d([1.0, 2.0, 1.0], [10:10:100])
 ```
 """
-function test1D(g, d)
-    b1 = g[1] + g[3]
-    b2 = 0.5*(b1 + g[2])
-    b3 = 0.5*(b1 - g[2])
+function test1D(filter, batches)
+    b1 = filter[1] + filter[3]
+    b2 = (b1 + filter[2])/2.0
+    b3 = (b1 - filter[2])/2.0
     b = [b2 b3]
     times_fft = []
     times_wino = []
     times_naive = []
 
-    for batch in tqdm(d)
+    for batch in tqdm(batches)
         data1d = rand(Float64, (1, Int64(floor(batch))))
-        data1d_padded = zeropad1D(data1d,g);
-        N = Int64(length(data1d_padded) - length(g) + 1);
+        data1d_padded = zeropad1D(data1d, filter);
+        N = Int64(length(data1d_padded) - length(filter) + 1);
         output_list = zeros(N);
-        t1 = @belapsed conv($data1d_padded, $g);
-        t2 = @belapsed Winograd1D!($data1d_padded, $g, $N, $output_list, $b);
-        t3 = @belapsed naive1D!($data1d_padded, $g, $N, $output_list)
+        t1 = @belapsed conv($data1d_padded, $gfilter);
+        t2 = @belapsed Winograd1D!($data1d_padded, $filter, $N, $output_list, $b);
+        t3 = @belapsed naive1D!($data1d_padded, $filter, $N, $output_list)
         times_fft = [times_fft; t1]
         times_wino = [times_wino; t2]
         times_naive = [times_naive; t3]
@@ -39,14 +39,13 @@ function test1D(g, d)
     xlabel!(L"$log_{10}(N)$")
     ylabel!(L"$log_{10}(t)$")
     display(p)
-    savefig(p,"file.png")
+    savefig(p,"file1d.png")
     
 
 
 end
 
 """
-    NOTE: WORK IN PROGRESS
 
     test2D(f, d)
 
@@ -54,5 +53,35 @@ Benchmark FFT and winograd convolution in 2D with filter f for data lengths as s
 by an array d. Plots log-log plot of time taken for each.
 
 """
-function test2D()
+function test2D(filter, batches)
+    At = [1 1 1 0; 0 1 -1 -1]
+    A = transpose(At)
+    G = [1 0 0; 0.5 0.5 0.5; 0.5 -0.5 0.5; 0 0 1]
+    Gt = transpose(G)
+    Bt = [1 0 -1 0; 0 1 1 0; 0 -1 1 0; 0 1 0 -1]
+    B = transpose(B)
+    
+    times_fft = []
+    times_wino = []
+    times_naive = []
+
+    for batch in tqdm(batches)
+        data2d = rand(Float64, (1, Int64(floor(batch))))
+        data2d_padded = zeropad2D(data2d, filter);
+        N = Int64(length(data2d_padded) - length(filter) + 1);
+        output_list = zeros(N);
+        t1 = @belapsed conv($data2d_padded, $filter2d);
+        t2 = @belapsed Winograd2D!($data2d_padded, $filter, $);
+        t3 = @belapsed naive2D!($data2d_padded, $g, $N, $output_list)
+        times_fft = [times_fft; t1]
+        times_wino = [times_wino; t2]
+        times_naive = [times_naive; t3]
+    end
+
+    p = plot(d, [times_fft, times_wino, times_naive], title="log-log complexity plot", label=["FFT" "Winograd" "Naive"], linewidth=2, xscale=:log10, yscale=:log10, minorgrid=true, legend=:topleft)
+    xlabel!(L"$log_{10}(N)$")
+    ylabel!(L"$log_{10}(t)$")
+    display(p)
+    savefig(p,"file2d.png")
+
 end
