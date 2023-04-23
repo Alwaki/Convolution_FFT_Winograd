@@ -28,4 +28,6 @@ FFTW.set_num_threads(1)
 datapoints = exp10.(range(1, stop=5, length=50))
 filter = [1.0, 2.0, 1.0]
 filter = Float64.(filter)
-#test1D(filter, datapoints);
+test1D(filter, datapoints);
+
+# Run 2D test
