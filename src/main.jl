@@ -10,12 +10,13 @@ Description:    This project intends to benchmark convolution
 
 Authors:        Alexander Wallén Kiessling & Viktor Svalstedt
 
-Version:        1.1 (April 2023)
+Version:        2.0 (April 2023)
 """
 
 import Pkg; 
-Pkg.add(["FFTW", "DSP", "BenchmarkTools", "Plots", "LaTeXStrings", "ProgressBars", "ProfileView", "MKL"]);
-using FFTW, DSP, BenchmarkTools, Plots, LaTeXStrings, ProgressBars, Profile, MKL
+Pkg.add(["FFTW", "DSP", "BenchmarkTools", "Plots", "LaTeXStrings", 
+"ProgressBars", "ProfileView", "MKL", "LinearAlgebra"]);
+using FFTW, DSP, BenchmarkTools, Plots, LaTeXStrings, ProgressBars, Profile, MKL, LinearAlgebra
 include("winograd.jl")
 include("tests.jl")
 include("naive.jl")
@@ -27,7 +28,8 @@ FFTW.set_num_threads(1)
 # Run 1D test
 datapoints = exp10.(range(1, stop=5, length=50))
 filter = [1.0, 2.0, 1.0]
-filter = Float64.(filter)
-test1D(filter, datapoints);
+#test1D(filter, datapoints);
 
 # Run 2D test
+datapoints2d = exp10.(range(1, stop=3, length=10))
+test2D(filter, datapoints2d)
