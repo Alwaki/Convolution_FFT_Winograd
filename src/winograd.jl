@@ -38,9 +38,12 @@ this function utilizes matrix multiplication.
 """
 function WinogradMatrix2D!(d::AbstractMatrix, out::AbstractMatrix, 
     dw::Int, dh::Int, AtGFGtBt::AbstractMatrix, BA::AbstractMatrix)
+    temp_mat=zeros(eltype(d),2,4) 
     @inline for i = 1:2:dh
         @inline for j = 1:2:dw
-            out[i:i+1,j:j+1] = AtGFGtBt*d[i:i+3,j:j+3]*BA
+            mul!(temp_mat,AtGFGtBt,view(d,i:i+3,j:j+3))
+            mul!(view(out, i:i+1,j:j+1), temp_mat,BA)
+            #out[i:i+1,j:j+1] = AtGFGtBt*view(d,i:i+3,j:j+3)*BA
         end
     end
     return out
