@@ -10,7 +10,7 @@
 Computes the Naive method convolution between the filter (of length 3) and data
 """
 
-function naive1D!(f::AbstractVector, d::AbstractVector, N::Int, out::AbstractVector)
+function naive1D!(f, d, N::Int, out)
     @inline for i = 1:N
         out[i] = f[1]*d[i] + f[2]*d[i+1] + f[3]*d[i+2]
     end
@@ -30,8 +30,8 @@ function naive1D!(f::AbstractVector, d::AbstractVector, N::Int, out::AbstractVec
 Computes the Naive method convolution between the filter (of size 3x3) and data
 """
 
-function naive2D!(f::AbstractMatrix, d::AbstractMatrix, dw::Int, dh::Int,
-     out::AbstractMatrix)
+function naive2D!(f, d, dw::Int, dh::Int,
+     out)
     @inline for i = 2:dh-1
         @inline for j = 2:dw-1
             out[i-1, j-1] = f[1,1]*d[i-1,j-1] + f[1,2]*d[i-1,j] + f[1,3]*d[i-1,j+1] +

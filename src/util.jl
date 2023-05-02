@@ -13,7 +13,7 @@ julia> zeropad1D([1.0, 2.0, 3.0], [1.0, 1.0, 1.0])
 [0.0, 0.0, 1.0, 2.0, 3.0, 0.0, 0.0]
 ```
 """
-function zeropad1D(data::AbstractVector, filter::AbstractVector)
+function zeropad1D(data, filter)
     N = length(filter) - 1
     z = zeros(1, N)
     return [z data z] 
@@ -29,7 +29,7 @@ end
 Adds zeros to a data array, with consideration to the shape of the filter to be used.
 
 """
-function zeropad2D(filter::AbstractMatrix, data::AbstractMatrix)
+function zeropad2D(filter, data)
     padded_data = deepcopy(data)
     fh = size(filter, 1) - 2
     fw = size(filter, 2) - 2

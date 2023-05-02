@@ -31,7 +31,7 @@ filter = [1.0, 2.0, 1.0]
 #test1D(filter, datapoints);
 
 # Run 2D test
-datapoints2d = exp10.(range(1, stop=3, length=4))
+datapoints2d = exp10.(range(1, stop=3, length=50))
 #test2D(filter, datapoints2d)
 
 # Auxiliary testing

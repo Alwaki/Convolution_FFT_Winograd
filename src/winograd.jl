@@ -11,8 +11,8 @@
 Computes the Winograd convolution with output size 2 and filter size 3. Note that 
 this function works only on 1D data and filters.
 """
-function Winograd1D!(d::AbstractVector, f::AbstractVector, N::Int,
-     out::AbstractVector, b::AbstractVector)
+function Winograd1D!(d, f, N::Int,
+     out, b)
     @inline for i = 1:2:N-1
         a1 = (d[2] + d[3]) * b[1]
         a2 = (d[3] - d[2]) * b[2]
@@ -36,8 +36,8 @@ end
 Computes the Winograd convolution with output size 2x2 and filter size 3x3. Note that 
 this function utilizes matrix multiplication.
 """
-function WinogradMatrix2D!(d::AbstractMatrix, out::AbstractMatrix, 
-    dw::Int, dh::Int, AtGFGtBt::AbstractMatrix, BA::AbstractMatrix)
+function WinogradMatrix2D!(d, out, 
+    dw::Int, dh::Int, AtGFGtBt, BA)
     temp_mat=zeros(eltype(d),2,4) 
     @inline for i = 1:2:dh
         @inline for j = 1:2:dw

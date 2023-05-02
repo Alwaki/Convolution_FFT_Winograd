@@ -80,8 +80,8 @@ function test2D(filter, batches)
 
     # Create 2d filter from separable kernel vectors
     filter2d = filter*transpose(filter);
-    filter = Float64.(filter)
-    filter2d = Float64.(filter2d)
+    filter = Float16.(filter)
+    filter2d = Float16.(filter2d)
 
     # Winograd precomputation
     At = [1 1 1 0; 0 1 -1 -1]
@@ -102,7 +102,7 @@ function test2D(filter, batches)
     for batch in tqdm(batches)
 
         # Generate random data
-        data2d = rand(Float64, (Int64(floor(batch)), Int64(floor(batch))))
+        data2d = rand(Float16, (Int64(floor(batch)), Int64(floor(batch))))
 
         # Zeropad data
         data2d_padded = zeropad2D(filter2d, data2d);
