@@ -42,9 +42,20 @@ function WinogradMatrix2D!(d, out,
     @inline for i = 1:2:dh
         @inline for j = 1:2:dw
             mul!(temp_mat,AtGFGtBt,view(d,i:i+3,j:j+3))
-            mul!(view(out, i:i+1,j:j+1), temp_mat,BA)
+            #mul!(view(out, i:i+1,j:j+1), temp_mat,BA)
+            mult_BA!(view(out, i:i+1,j:j+1),temp_mat);
             #out[i:i+1,j:j+1] = AtGFGtBt*view(d,i:i+3,j:j+3)*BA
         end
     end
     return out
+end
+
+
+
+# Compute S*BA where BA=[1 0 ; 0 1 ; 1 0 ; 0 1]
+function mult_BA!(output,S)
+    output[1,1]=S[1,1]+S[1,3];
+    output[2,1]=S[2,1]+S[2,3];
+    output[1,2]=S[1,2]+S[1,4];
+    output[2,2]=S[2,2]+S[2,4];
 end
